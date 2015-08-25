@@ -37,9 +37,9 @@ public class Entity {
 	}
 
 	public void Add(World world) {
-		gameObject.SetActive(true);
 		this.world = world;
 		this.isAdded = true;
+		gameObject.SetActive(this.world.IsActive() && this.isAdded);
 		
 		Added();
 	}
