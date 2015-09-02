@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Bolt.Timeline;
+using Bolt;
 
 public class SceneManager : MonoBehaviour
 {
-	
+
 	public CutsceneTimeline timeline;
 	private World world;
 
@@ -12,7 +12,14 @@ public class SceneManager : MonoBehaviour
 	void Start ()
 	{
 		world = new World();
-		world.Add( new TestEntity(0, 0) );
+		world.Begin();
+
+		world.Add( new Arm(0, 0) );
+
+		world.Add( new Arm(16, 0) );
+
+
+
 
 		SetTimeline (new TestTimeline ());
 	}
@@ -38,7 +45,7 @@ public class SceneManager : MonoBehaviour
 		world.Update();
 
 		if (timeline != null) {
-			timeline.Update ();	
+			timeline.Update ();
 		}
 	}
 }
