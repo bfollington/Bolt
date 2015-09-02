@@ -21,10 +21,24 @@ public class JSON {
 		JsonObject realJson = ToJsonObject(json);
 		return System.Convert.ToInt32( realJson[key] );
 	}
+
+	public static float GetFloat(object json, string key) {
+		JsonObject realJson = ToJsonObject(json);
+		return System.Convert.ToSingle( realJson[key] );
+	}
 	
 	public static bool GetBool(object json, string key) {
 		JsonObject realJson = ToJsonObject(json);
 		return System.Convert.ToBoolean( realJson[key] );
+	}
+
+	public static Vector2 GetVector2(object json, string key) {
+		JsonObject realJson = ToJsonObject(json);
+		JsonObject inner = ToJsonObject(realJson[key]);
+		var x = System.Convert.ToSingle(inner["x"]);
+		var y = System.Convert.ToSingle(inner["y"]);
+
+		return new Vector2(x, y);
 	}
 	
 	public static string GetString(object json, string key) {
