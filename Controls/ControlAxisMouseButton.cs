@@ -1,21 +1,21 @@
 using System;
 using UnityEngine;
 
-namespace Bolt.Control
+namespace Bolt
 {
 	public class ControlAxisMouseButton : IControlAxis
 	{
 		private int trigger;
-		
+
 		public ControlAxisMouseButton (int trigger)
 		{
 			this.trigger = trigger;
 		}
-		
+
 		public float GetAxis()
 		{
 			var pos = Input.GetMouseButton(trigger);
-			
+
 			if ( pos )
 			{
 				return 1f;

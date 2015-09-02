@@ -3,9 +3,9 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
-using Bolt.Actions;
+using Bolt;
 
-namespace Bolt.Timeline {
+namespace Bolt {
 	public class CutsceneTimeline
 	{
 

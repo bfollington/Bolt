@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Util;
-using Bolt.Animation;
+using Bolt;
 
 [RequireComponent (typeof (SpriteRenderer))]
 public class SpriteAnimator : MonoBehaviour {
@@ -18,16 +18,16 @@ public class SpriteAnimator : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+
 		Play(initialAnimation);
-	
+
 	}
-	
+
 	private void SetSprite(Sprite sprite)
 	{
 		GetComponent<SpriteRenderer>().sprite = sprite;
 	}
-	
+
 	/// <summary>
 	/// Get the animation object by name.
 	/// </summary>
@@ -42,10 +42,10 @@ public class SpriteAnimator : MonoBehaviour {
 				return anim;
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	/// <summary>
 	/// Play an animation by name.
 	/// </summary>
@@ -58,7 +58,7 @@ public class SpriteAnimator : MonoBehaviour {
 		speed = GetAnimationByName( animation ).speed;
 		loop = GetAnimationByName( animation ).loop;
 	}
-	
+
 	/// <summary>
 	/// Play an animation by the index.
 	/// </summary>
@@ -71,24 +71,24 @@ public class SpriteAnimator : MonoBehaviour {
 		speed = anims[index].speed;
 		loop = anims[index].loop;
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		ticker += Time.deltaTime;
-		
+
 		if (ticker > 1/speed)
 		{
 			currentFrame++;
 			ticker = 0;
 		}
-		
+
 		if (currentFrame >= frames.SpriteCount() && loop )
 		{
 			currentFrame = 0;
 		} else if ( currentFrame >= frames.SpriteCount() ) {
 			currentFrame--;
 		}
-		
+
 		SetSprite( frames.GetSpriteByIndex( currentFrame ) );
 	}
 }

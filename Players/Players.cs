@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Bolt.Control
+namespace Bolt
 {
 	public static class Players
 	{

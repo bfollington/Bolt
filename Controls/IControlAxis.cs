@@ -1,6 +1,6 @@
 using System;
 
-namespace Bolt.Control
+namespace Bolt
 {
 	public interface IControlAxis
 	{

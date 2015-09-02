@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Bolt.Animation
+namespace Bolt
 {
 	[Serializable]
 	public class AddedAnimation
@@ -13,7 +13,7 @@ namespace Bolt.Animation
 		public AddedAnimation ()
 		{
 		}
-		
+
 		public string GetName()
 		{
 			if (texture) return texture.name;

@@ -1,18 +1,18 @@
 using System;
 using UnityEngine;
 
-namespace Bolt.Control
+namespace Bolt
 {
 	public class ControlAxisButton : IControlAxis
 	{
-		
+
 		private string trigger;
-	
+
 		public ControlAxisButton (string trigger)
 		{
 			this.trigger = trigger;
 		}
-		
+
 		public float GetAxis()
 		{
 			var pos = Input.GetButton(trigger);

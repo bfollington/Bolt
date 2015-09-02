@@ -1,10 +1,10 @@
 using UnityEngine;
 
-namespace Bolt.Util
+namespace Bolt
 {
 	public static class RectUtil
 	{
-		
+
 		/// <summary>
 		/// Find the intersection of two rectangles, returns the amount of overlap as a Rectangle.
 		/// </summary>
@@ -14,44 +14,44 @@ namespace Bolt.Util
 		{
 
             if (one.Overlaps(two))
-            {  
+            {
                	float left, right, top, bottom;
-               	
+
                	if (one.xMin > two.xMin)
                	{
                		left = one.xMin;
                	} else {
                		left = two.xMin;
                	}
-               	
+
                	if (one.xMax < two.xMax)
                	{
                		right = one.xMax;
                	} else{
                		right = two.xMax;
                	}
-               	
+
                	if (one.yMax < two.yMax)
                	{
                		top = one.yMax;
                	} else {
                		top = two.yMax;
                	}
-               	
+
                	if (one.yMin > two.yMin)
                	{
                		bottom = one.yMin;
                	} else {
                		bottom = two.yMin;
                	}
-				
+
                 return new Rect(left, top, right - left, top - bottom);
             } else {
                 return new Rect(0, 0, 0, 0);
             }
-            
+
 		}
-	
+
 		/// <summary>
 		/// Is this a valid rectangle?
 		/// </summary>

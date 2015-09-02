@@ -1,15 +1,15 @@
 using UnityEngine;
 
-namespace Bolt.Collisions {
+namespace Bolt {
 	public class Hitbox : MonoBehaviour, ICollider {
-	
+
 		public float width;
 		public float height;
 		public float offsetX;
 		public float offsetY;
 		public string type = "solid";
 		public bool active = true;
-	
+
 		public float Width
 		{
 			get
@@ -21,7 +21,7 @@ namespace Bolt.Collisions {
 				width = value;
 			}
 		}
-		
+
 		public float Height
 		{
 			get
@@ -33,40 +33,40 @@ namespace Bolt.Collisions {
 				height = value;
 			}
 		}
-	
+
 		public float xLeft
 		{
 			get {
 				return transform.position.x + offsetX;
 			}
 		}
-		
+
 		public float xRight
 		{
 			get {
 				return transform.position.x + offsetX + width;
 			}
 		}
-		
+
 		public float yTop
 		{
 			get {
 				return transform.position.y + offsetY;
 			}
 		}
-		
+
 		public float yBottom
 		{
 			get {
 				return transform.position.y - height + offsetY;
 			}
 		}
-		
+
 		public bool isActive()
 		{
 			return active;
 		}
-	
+
 		public bool Active
 		{
 			get
@@ -78,17 +78,17 @@ namespace Bolt.Collisions {
 				active = value;
 			}
 		}
-	
+
 		// Use this for initialization
 		void Start () {
-		
+
 		}
-		
+
 		// Update is called once per frame
 		void Update () {
-	
+
 		}
-		
+
 		/// <summary>
 		/// Does this Hitbox intersect with another one.
 		/// </summary>
@@ -104,24 +104,24 @@ namespace Bolt.Collisions {
 				return true;
 			}
 		}
-	
+
 		public void OnDrawGizmos()
 		{
 			Gizmos.color = new Color (1f, 0f , 0f, 0.5f);
 			Gizmos.DrawWireCube (new Vector3( transform.position.x + offsetX + width / 2, transform.position.y + offsetY - height / 2, transform.position.z),
 			                 new Vector3 (width, height, 1));
-	
+
 			Gizmos.color = new Color (0f, 1f , 0f, 0.5f);
 			Gizmos.DrawWireCube (transform.position,
 			                     new Vector3 (0.1f, 0.1f, 1f));
-			                     
+
 			Gizmos.color = new Color (0f, 0f, 1f, 0.5f);
 		}
-	
+
 		public Rect AsRect()
 		{
 			return new Rect (xLeft, yTop, width, height);
 		}
-	
+
 	}
 }

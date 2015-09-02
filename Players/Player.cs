@@ -1,13 +1,13 @@
 using System;
-using Bolt.Util;
+using Bolt;
 
-namespace Bolt.Control
+namespace Bolt
 {
 	public class Player
 	{
-	
+
 		public ControlManager controller;
-	
+
 		public Player ( ControlManager controller )
 		{
 			this.controller = controller;
