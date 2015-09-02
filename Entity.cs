@@ -6,7 +6,6 @@ public class Entity {
 	private GameObject gameObject;
 	private World world;
 
-	private Vector2 pos;
 	private bool isAdded = false;
 
 	private List<Entity> children;
@@ -19,21 +18,46 @@ public class Entity {
 
 	public float x
 	{
-	    get { return pos.x; }
-	    set { pos.x = value; }
+		get { return gameObject.transform.localPosition.x; }
+	    set {
+			gameObject.transform.localPosition = new Vector3(
+				value,
+				gameObject.transform.localPosition.y,
+				gameObject.transform.localPosition.z
+			);
+	    }
 	}
 
 	public float y
 	{
-	    get { return pos.y; }
-	    set { pos.y = value; }
+		get { return gameObject.transform.localPosition.y; }
+	    set {
+			gameObject.transform.localPosition = new Vector3(
+				gameObject.transform.localPosition.x,
+				value,
+				gameObject.transform.localPosition.z
+			);
+	    }
+	}
+
+	public float layer
+	{
+	    get { return gameObject.transform.localPosition.z; }
+		set {
+			gameObject.transform.localPosition = new Vector3(
+				gameObject.transform.localPosition.x,
+				gameObject.transform.localPosition.y,
+				value
+			);
+		}
 	}
 
 	public Entity(float x = 0, float y = 0) {
 		gameObject = new GameObject("Test");
 		gameObject.SetActive(false);
 
-		pos = new Vector2(x, y);
+		this.x = x;
+		this.y = y;
 		children = new List<Entity>();
 	}
 
@@ -51,6 +75,11 @@ public class Entity {
 
 		e.InnerObject().transform.parent = InnerObject().transform;
 
+		return e;
+	}
+
+	public T AddChildTyped<T>(T e) where T : Entity {
+		AddChild(e);
 		return e;
 	}
 
@@ -117,7 +146,6 @@ public class Entity {
 	
 	// Update is called once per frame
 	public virtual void Update() {
-		gameObject.transform.localPosition = new Vector3(pos.x, pos.y, 0);
 
 		foreach (var child in children) {
 			child.Update();
