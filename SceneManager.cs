@@ -14,9 +14,7 @@ public class SceneManager : MonoBehaviour
 		world = new World();
 		world.Begin();
 
-		world.Add( new Arm(0, 0) );
-
-		world.Add( new Arm(16, 0) );
+		world.Add( new Sylvi(0, 0) );
 
 
 
