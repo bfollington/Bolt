@@ -11,6 +11,7 @@ public class TimelineEvent
 	private string eventToTrigger;
 	private ActionGroup groupToRun;
 	private Func<IEnumerator> methodToCall;
+	private Action action;
 	public Timeline timeline;
 
 	public TimelineEvent (string eventToTrigger)
@@ -23,9 +24,8 @@ public class TimelineEvent
 		this.groupToRun = groupToRun;
 	}
 
-	public TimelineEvent(Func<IEnumerator> action )
-	{
-		methodToCall = action;
+	public TimelineEvent(Action action) {
+		this.action = action;
 	}
 
 	public Coroutine StartCoroutine(IEnumerator routine)
@@ -35,14 +35,14 @@ public class TimelineEvent
 
 	public void Trigger()
 	{
-		if (groupToRun != null)
-		{
+		if (groupToRun != null) {
 			timeline.Run( groupToRun );
 		} else if (eventToTrigger != null) {
 			timeline.TriggerEvent( eventToTrigger );
-		} else {
-			timeline.Run( methodToCall );
+		} else if (action != null) {
+			action();
 		}
+
 	}
 
 }
