@@ -5,8 +5,7 @@ using Bolt;
 public class SceneManager : MonoBehaviour
 {
 
-	public CutsceneTimeline timeline;
-	private World world;
+	private static List<Timeline> timelines = new List<Timeline>();
 
 	// Use this for initialization
 	void Start ()

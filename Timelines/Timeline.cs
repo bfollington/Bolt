@@ -1,12 +1,12 @@
 
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System;
 using Bolt;
 
 namespace Bolt {
-	public class CutsceneTimeline
+	public class Timeline
 	{
 
 		private Dictionary<float, List<TimelineEvent>> timeline;
@@ -14,7 +14,7 @@ namespace Bolt {
 		public SceneManager parent;
 		private float time = 0f;
 
-		public CutsceneTimeline ()
+		public Timeline ()
 		{
 			timeline = new Dictionary<float, List<TimelineEvent>>();
 			events = new Dictionary<string, ActionGroup>();
@@ -44,6 +44,10 @@ namespace Bolt {
 			{
 				timeline.Remove(key);
 			}
+		}
+
+		public void End() {
+			parent.EndTimeline(this);
 		}
 
 		protected void AddEvent(string key, ActionGroup group)
@@ -79,11 +83,6 @@ namespace Bolt {
 		{
 			group.timeline = this;
 			parent.StartCoroutine( group.Routine() );
-		}
-
-		public void Run( Func<IEnumerator> method )
-		{
-			parent.StartCoroutine( method() );
 		}
 
 	}

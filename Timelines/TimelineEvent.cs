@@ -11,7 +11,7 @@ public class TimelineEvent
 	private string eventToTrigger;
 	private ActionGroup groupToRun;
 	private Func<IEnumerator> methodToCall;
-	public CutsceneTimeline timeline;
+	public Timeline timeline;
 
 	public TimelineEvent (string eventToTrigger)
 	{

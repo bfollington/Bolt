@@ -7,7 +7,7 @@ using Bolt;
 namespace Bolt {
 	public class ActionGroup
 	{
-		public CutsceneTimeline timeline;
+		public Timeline timeline;
 
 		public ActionGroup ()
 		{
