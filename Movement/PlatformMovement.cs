@@ -20,69 +20,63 @@ namespace Bolt {
 
 		// Update is called once per frame
 		void Update () {
-			velocity.y -= gravity;
 
-			velocity.x = ClampUtil.Clamp (velocity.x, -1 * maxSpeed.x, maxSpeed.x);
-			velocity.y = ClampUtil.Clamp (velocity.y, -1 * maxSpeed.y, maxSpeed.y);
+			var hitbox = this.GetComponent<Hitbox> ();
 
-			var pos = this.transform.position;
-
-			var scaledVelocity = new Vector2 (velocity.x * TimeUtil.scale (),
-			                                  velocity.y * TimeUtil.scale ());
+			var scaledVelocity = new Vector2 (
+				velocity.x * TimeUtil.scale (),
+                velocity.y * TimeUtil.scale ()
+            );
 
 			if (velocity.x != 0)
 			{
-				var collision = CollideManager.CollideAt (collideTypes, this.GetComponent<Hitbox> (), scaledVelocity.x, 0);
+				var collision = Collide.WithAtPos (collideTypes, this.GetComponent<Hitbox> (), scaledVelocity.x, 0);
 
-				if (collision == null)
+				if (!collision.Intersect)
 				{
-					pos.x += scaledVelocity.x;
+					hitbox.left += scaledVelocity.x;
 				} else {
 
 					velocity.x = 0;
 
-					var hitbox = this.GetComponent<Hitbox> ();
-
-					if (hitbox.xLeft < collision.second.xLeft)
-					{
-						pos.x = collision.second.xLeft - hitbox.width - hitbox.offsetX;
+					if (hitbox.left <= (collision.Collider as Hitbox).left) {
+						hitbox.right = (collision.Collider as Hitbox).left;
 					} else {
-						pos.x = collision.second.xRight  - hitbox.offsetX;
+						hitbox.left = (collision.Collider as Hitbox).right;
 					}
 				}
 			}
 
 			if (velocity.y != 0)
 			{
-				var collision = CollideManager.CollideAt (collideTypes, this.GetComponent<Hitbox> (), 0, scaledVelocity.y);
+				var collision = Collide.WithAtPos (collideTypes, this.GetComponent<Hitbox> (), 0, scaledVelocity.y);
 
-				if (collision == null)
+				if (!collision.Intersect)
 				{
-					pos.y += scaledVelocity.y;
+					hitbox.bottom += scaledVelocity.y;
 				} else {
 
 					velocity.y = 0;
-
-					var hitbox = this.GetComponent<Hitbox> ();
-
-					if (hitbox.yBottom < collision.second.yBottom)
-					{
-						pos.y = collision.second.yBottom - hitbox.offsetY;
+				
+					if (hitbox.bottom >= (collision.Collider as Hitbox).bottom) {
+						hitbox.bottom = (collision.Collider as Hitbox).top;
 					} else {
-						pos.y = collision.second.yTop + hitbox.height - hitbox.offsetY;
+						hitbox.top = (collision.Collider as Hitbox).bottom;
 					}
-
 				}
 			}
 
-			this.transform.position = pos;
+			velocity.y -= gravity;
+
+			velocity.x = ClampUtil.Clamp (velocity.x, -1 * maxSpeed.x, maxSpeed.x);
+			velocity.y = ClampUtil.Clamp (velocity.y, -1 * maxSpeed.y, maxSpeed.y);
 		}
 
 		public bool OnGround()
 		{
-			var collision = CollideManager.CollideAt (collideTypes, this.GetComponent<Hitbox> (), 0, -0.5f);
+			var collision = Collide.WithAtPos (collideTypes, this.GetComponent<Hitbox> (), 0, -0.5f);
 
-			return collision != null;
+			return collision.Intersect;
 		}
 	}
 }

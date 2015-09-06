@@ -12,4 +12,12 @@ public static class Vector2Extension {
 
 		return new Vector2(cos * tx - sin * ty, sin * tx + cos * ty);
 	}
+
+	public static float DotProduct(this Vector2 v, Vector2 vector) {
+		return v.x * vector.x + v.y * vector.y;
+	}
+
+	public static float DistanceTo(this Vector2 v, Vector2 vector) {
+		return (float)Math.Sqrt(Math.Pow(vector.x - v.x, 2) + Math.Pow(vector.x - v.y, 2));
+	}
  }

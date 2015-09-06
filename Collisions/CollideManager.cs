@@ -5,40 +5,42 @@ using Bolt;
 using System.Linq;
 
 namespace Bolt {
-	public class CollideManager {
+	public class Collide {
 
-		public static Tuple<GameObject, Hitbox> Collide(string type, Hitbox collider ) {
-			return CollideAt (new string[] {type}, collider, collider.transform.position.x, collider.transform.position.y);
+		public static CollisionResult With(string type, ICollider collider ) {
+			return WithAtPos (new string[] {type}, collider, collider.GetPosition().x, collider.GetPosition().y);
 		}
 
-		public static Tuple<GameObject, Hitbox> Collide(string[] types, Hitbox collider ) {
-			return CollideAt (types, collider, collider.transform.position.x, collider.transform.position.y);
+		public static CollisionResult With(string[] types, ICollider collider ) {
+			return WithAtPos (types, collider, collider.GetPosition().x, collider.GetPosition().y);
 		}
 
-		public static Tuple<GameObject, Hitbox> CollideAt( string type, Hitbox collider, float x, float y )
+		public static CollisionResult WithAtPos( string type, ICollider collider, float x, float y )
 		{
-			return CollideAt (new string[] {type}, collider, x, y);
+			return WithAtPos (new string[] {type}, collider, x, y);
 		}
 
-		public static Tuple<GameObject, Hitbox> CollideAt( string[] types, Hitbox collider, float x, float y )
+		public static CollisionResult WithAtPos( string[] types, ICollider collider, float x, float y )
 		{
 
-			var collisionList = Object.FindObjectsOfType<Hitbox> ();
+			var collisionList = Object.FindObjectsOfType<Mask> ();
 
-			foreach (Hitbox hb in collisionList)
+			foreach (ICollider col in collisionList)
 			{
-				if (hb.isActive() && hb != collider && types.Contains(hb.type))
+				if (col.isActive() && col != collider && types.Contains(col.GetCollisionType()))
 				{
-					var intersect = collider.Intersect(hb, x, y);
+					var intersect = collider.Intersect(col, x, y);
 
-					if (intersect)
+					if (intersect.Intersect)
 					{
-						return new Tuple<GameObject, Hitbox> (hb.gameObject, hb);
+						return intersect;
 					}
 				}
 			}
 
-			return null;
+			return new CollisionResult() {
+				Intersect = false
+			};
 		}
 	}
 }

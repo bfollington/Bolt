@@ -1,14 +1,21 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace Bolt {
-	public class Hitbox : MonoBehaviour, ICollider {
+	public class Hitbox : Mask, ICollider {
 
-		public float width;
-		public float height;
+		[SerializeField] 
+		private float width;
+		[SerializeField] 
+		private float height;
+
 		public float offsetX;
 		public float offsetY;
 		public string type = "solid";
 		public bool active = true;
+
+		// Representation
+		private Polygon polygon;
 
 		public float Width
 		{
@@ -34,31 +41,48 @@ namespace Bolt {
 			}
 		}
 
-		public float xLeft
+		public float left
 		{
 			get {
 				return transform.position.x + offsetX;
 			}
+
+			set {
+				transform.position = new Vector3(value - offsetX, transform.position.y,  transform.position.z);
+			}
 		}
 
-		public float xRight
+		public float right
 		{
 			get {
 				return transform.position.x + offsetX + width;
 			}
+
+			set {
+				transform.position = new Vector3(value - width - offsetX, transform.position.y,  transform.position.z);
+			}
+
 		}
 
-		public float yTop
+		public float top
 		{
 			get {
 				return transform.position.y + offsetY;
 			}
+
+			set {
+				transform.position = new Vector3(transform.position.x, value - offsetY, transform.position.z);
+			}
 		}
 
-		public float yBottom
+		public float bottom
 		{
 			get {
 				return transform.position.y - height + offsetY;
+			}
+
+			set {
+				transform.position = new Vector3(transform.position.x, value + height - offsetY, transform.position.z);
 			}
 		}
 
@@ -79,14 +103,63 @@ namespace Bolt {
 			}
 		}
 
-		// Use this for initialization
-		void Start () {
+		public string GetCollisionType() {
+			return type;
+		}
+
+		public Vector3 GetPosition() {
+			return transform.position;
+		}
+
+		public GameObject GetGameObject() {
+			return gameObject;
+		}
+
+		public void BuildPolygon() {
+			var corners = GetCorners(0, 0);
+			polygon = new Polygon();
+
+			foreach (var corner in corners) {
+				polygon.Points.Add(corner);
+			}
+
+			polygon.BuildEdges();
+		}
+
+		public Polygon GetPolygonRepresentation() {
+			if (polygon == null) {
+				BuildPolygon();
+			}
+
+			return polygon;
+		}
+
+		private List<Vector2> GetCorners(float speedX, float speedY) {
+			List<Vector2> corners = new List<Vector2>();
+
+			corners.Add( new Vector2(left + speedX, top + speedY) );
+			corners.Add( new Vector2(left + speedX, bottom + speedY) );
+			corners.Add( new Vector2(right + speedX, top + speedY) );
+			corners.Add( new Vector2(right + speedX, bottom + speedY) );
+
+			return corners;
 
 		}
 
-		// Update is called once per frame
-		void Update () {
+		public CollisionResult Intersect(ICollider col, float speedX, float speedY) {
+			if (col is Hitbox) {
+				return IntersectHitbox(col as Hitbox, speedX, speedY);
+			}
 
+			if (col is Polybox) {
+				return new CollisionResult() {
+					Intersect = false
+				};
+			}
+
+			return new CollisionResult() {
+				Intersect = false
+			};
 		}
 
 		/// <summary>
@@ -95,14 +168,26 @@ namespace Bolt {
 		/// <param name="hb">Hb.</param>
 		/// <param name="xOff">X off.</param>
 		/// <param name="yOff">Y off.</param>
-		public bool Intersect(Hitbox hb, float xOff, float yOff)
+		public CollisionResult IntersectHitbox(Hitbox hb, float speedX, float speedY)
 		{
-			if (xRight <= (hb.xLeft - xOff) || (hb.xRight - xOff) <= xLeft || yTop <= (hb.yBottom - yOff) || (hb.yTop - yOff) <= yBottom)
-			{
-				return false;
-			} else {
-				return true;
+			var corners = GetCorners(speedX, speedY);
+
+			foreach (var corner in corners) {
+				if (corner.x > hb.left && corner.x < hb.right) {
+					if (corner.y > hb.bottom && corner.y < hb.top) {
+						return new CollisionResult() {
+							Intersect = true,
+							Collider = hb,
+							CollisionObject = hb.GetGameObject(),
+							MinimumTranslation = new Vector2(0, 0) // @TODO
+						};
+					}
+				}
 			}
+
+			return new CollisionResult() {
+				Intersect = false
+			};
 		}
 
 		public void OnDrawGizmos()
@@ -120,7 +205,7 @@ namespace Bolt {
 
 		public Rect AsRect()
 		{
-			return new Rect (xLeft, yTop, width, height);
+			return new Rect (left, top, width, height);
 		}
 
 	}
