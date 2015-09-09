@@ -4,6 +4,24 @@ using Bolt;
 
 public class AbstractCollider : MonoBehaviour, ICollider {
 
+	[SerializeField] 
+	private string _type = "";
+
+	public string type {
+		get {
+			return _type;
+		}
+
+		set {
+			if (_type != "") {
+				Collide.UnassignFromType(this, _type);
+			}
+
+			_type = value;
+			Collide.AssignToType(this, _type);
+		}
+	}
+
 	public virtual bool isActive() {
 		return false;
 	}
@@ -24,6 +42,11 @@ public class AbstractCollider : MonoBehaviour, ICollider {
 
 	public virtual GameObject GetGameObject() {
 		return gameObject;
+	}
+
+	void Start() {
+		// Trigger adding to cache if type was set in editor
+		type = type;
 	}
 
 }

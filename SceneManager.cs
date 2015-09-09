@@ -11,7 +11,7 @@ public class SceneManager : MonoBehaviour
 
 	public SceneManager () : base ()
 	{
-		
+		Collide.ClearTypeCache();
 	}
 
 	public static Camera Cam() {
@@ -21,8 +21,14 @@ public class SceneManager : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
+		
+
 		var world = ChangeWorld( new World() );
-		world.Add( new Sylvi(0, 0) );
+
+
+		for (var i = 0; i < 32; i++) {
+			world.Add( new Sylvi(i, 0) );
+		}
 
 		var e = new Entity(32, 0);
 		var p = e.AddComponent<Polybox>();

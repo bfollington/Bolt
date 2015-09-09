@@ -6,7 +6,6 @@ namespace Bolt {
 
 		public float offsetX;
 		public float offsetY;
-		public string type = "";
 		public bool active = true;
 
 		private Polygon lastHitboxPoly;
