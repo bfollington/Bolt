@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 namespace Bolt {
-	public class Hitbox : Mask, ICollider {
+	public class Hitbox : AbstractCollider, ICollider {
 
 		[SerializeField] 
 		private float width;
@@ -11,7 +11,7 @@ namespace Bolt {
 
 		public float offsetX;
 		public float offsetY;
-		public string type = "solid";
+		public string type = "";
 		public bool active = true;
 
 		// Representation
@@ -26,6 +26,13 @@ namespace Bolt {
 			set
 			{
 				width = value;
+			}
+		}
+
+		public Vector2 Center
+		{
+			get {
+				return new Vector2(left + width / 2, bottom + height / 2);
 			}
 		}
 
@@ -115,8 +122,8 @@ namespace Bolt {
 			return gameObject;
 		}
 
-		public void BuildPolygon() {
-			var corners = GetCorners(0, 0);
+		public void BuildPolygon(float xOffset = 0, float yOffset = 0) {
+			var corners = GetCorners(xOffset, yOffset);
 			polygon = new Polygon();
 
 			foreach (var corner in corners) {
@@ -126,9 +133,9 @@ namespace Bolt {
 			polygon.BuildEdges();
 		}
 
-		public Polygon GetPolygonRepresentation() {
+		public Polygon GetPolygonRepresentation(float xOffset, float yOffset) {
 			if (polygon == null) {
-				BuildPolygon();
+				BuildPolygon(xOffset, yOffset);
 			}
 
 			return polygon;
@@ -138,9 +145,9 @@ namespace Bolt {
 			List<Vector2> corners = new List<Vector2>();
 
 			corners.Add( new Vector2(left + speedX, top + speedY) );
-			corners.Add( new Vector2(left + speedX, bottom + speedY) );
 			corners.Add( new Vector2(right + speedX, top + speedY) );
 			corners.Add( new Vector2(right + speedX, bottom + speedY) );
+			corners.Add( new Vector2(left + speedX, bottom + speedY) );
 
 			return corners;
 
@@ -152,10 +159,10 @@ namespace Bolt {
 			}
 
 			if (col is Polybox) {
-				return new CollisionResult() {
-					Intersect = false
-				};
+				return IntersectPolybox(col as Polybox, speedX, speedY);
 			}
+
+			Logger.Log("Collision type not supported for", this, col);
 
 			return new CollisionResult() {
 				Intersect = false
@@ -175,11 +182,26 @@ namespace Bolt {
 			foreach (var corner in corners) {
 				if (corner.x > hb.left && corner.x < hb.right) {
 					if (corner.y > hb.bottom && corner.y < hb.top) {
+
+						var translation = new Vector2();
+
+						if (Center.x < hb.Center.x) {
+							translation.x = hb.left - right;
+						} else {
+							translation.x = hb.right - left;
+						}
+
+						if (Center.y > hb.Center.y) {
+							translation.y = hb.top - bottom;
+						} else {
+							translation.y = hb.bottom - top;
+						}
+
 						return new CollisionResult() {
 							Intersect = true,
 							Collider = hb,
 							CollisionObject = hb.GetGameObject(),
-							MinimumTranslation = new Vector2(0, 0) // @TODO
+							MinimumTranslation = translation
 						};
 					}
 				}
@@ -187,6 +209,20 @@ namespace Bolt {
 
 			return new CollisionResult() {
 				Intersect = false
+			};
+		}
+
+		public CollisionResult IntersectPolybox(Polybox p, float speedX, float speedY) {
+
+			var poly = this.GetPolygonRepresentation(speedX, speedY);
+
+			var collision = PolygonCollisionUtil.PolygonCollision(poly, p.GetPolygonAtPosition(0, 0), new Vector2(0, 0));
+
+			return new CollisionResult() {
+				Intersect = collision.Intersect || collision.WillIntersect,
+				Collider = p,
+				CollisionObject = p.GetGameObject(),
+				MinimumTranslation = collision.MinimumTranslation
 			};
 		}
 

@@ -2,12 +2,14 @@ using UnityEngine;
 using System.Collections.Generic;
 
 namespace Bolt {
-	public class Polybox : Mask, ICollider {
+	public class Polybox : AbstractCollider, ICollider {
 
 		public float offsetX;
 		public float offsetY;
-		public string type = "solid";
+		public string type = "";
 		public bool active = true;
+
+		private Polygon lastHitboxPoly;
 
 		private Polygon polygon = new Polygon();
 
@@ -24,6 +26,12 @@ namespace Bolt {
 
 		public Polygon GetPolygon() {
 			return polygon;
+		}
+
+		public Polygon GetPolygonAtPosition(float xOffset, float yOffset) {
+			var e = GetComponent<EntityAccess>().entity;
+
+			return polygon.OffsetBy(e.x + xOffset, e.y + yOffset);
 		}
 
 		public string GetCollisionType() {
@@ -54,12 +62,14 @@ namespace Bolt {
 				var res = IntersectPolybox(col as Polybox, speedX, speedY);
 
 				return new CollisionResult() {
-					Intersect = res.Intersect,
+					Intersect = res.Intersect || res.WillIntersect,
 					MinimumTranslation = res.MinimumTranslation,
 					Collider = col,
 					CollisionObject = col.GetGameObject()
 				};
 			}
+
+			Logger.Log("Collision type not supported for", this, col);
 
 			return new CollisionResult() {
 				Intersect = false
@@ -68,18 +78,34 @@ namespace Bolt {
 
 		public PolygonCollisionUtil.PolygonCollisionResult IntersectHitbox(Hitbox hb, float speedX, float speedY)
 		{
-			var poly = hb.GetPolygonRepresentation();
+			var poly = hb.GetPolygonRepresentation(0, 0);
+			lastHitboxPoly = poly;
 
-			return PolygonCollisionUtil.PolygonCollision(polygon, poly, new Vector2(speedX, speedY));
+			return PolygonCollisionUtil.PolygonCollision(GetPolygonAtPosition(speedX, speedY), poly, new Vector2(0, 0));
 		}
 
 		public PolygonCollisionUtil.PolygonCollisionResult IntersectPolybox(Polybox p, float speedX, float speedY) {
-			return PolygonCollisionUtil.PolygonCollision(polygon, p.GetPolygon(), new Vector2(speedX, speedY));
+			return PolygonCollisionUtil.PolygonCollision(GetPolygonAtPosition(speedX, speedY), p.GetPolygon(), new Vector2(0, 0));
 		}
 
 		public void OnDrawGizmos()
 		{
+
 			Gizmos.color = new Color (1f, 1f , 0f, 1f);
+
+			if (lastHitboxPoly != null) {
+				for (var i = 0; i < lastHitboxPoly.Points.Count - 1; i++) {
+					var point = lastHitboxPoly.Points[i];
+					var nextPoint = lastHitboxPoly.Points[i + 1];
+
+					Gizmos.DrawLine(
+						new Vector3(point.x, point.y, 0),
+						new Vector3(nextPoint.x, nextPoint.y, 0)
+					);
+				}
+			}
+
+
 
 			for (var i = 0; i < polygon.Points.Count - 1; i++) {
 				var point = polygon.Points[i];

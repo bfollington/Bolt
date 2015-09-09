@@ -23,7 +23,7 @@ namespace Bolt {
 		public static CollisionResult WithAtPos( string[] types, ICollider collider, float x, float y )
 		{
 
-			var collisionList = Object.FindObjectsOfType<Mask> ();
+			var collisionList = Object.FindObjectsOfType<AbstractCollider> ();
 
 			foreach (ICollider col in collisionList)
 			{

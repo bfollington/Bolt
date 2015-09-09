@@ -80,6 +80,9 @@ public class Entity {
 		this.x = x;
 		this.y = y;
 		children = new List<Entity>();
+
+		var access = AddComponent<EntityAccess>();
+		access.entity = this;
 	}
 
 	/// <summary>

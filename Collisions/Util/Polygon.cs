@@ -28,6 +28,16 @@ namespace Bolt {
 			}
 		}
 
+		public Polygon OffsetBy(float x, float y) {
+			var polygon = new Polygon();
+			foreach (var p in points) {
+				polygon.Points.Add( new Vector2(p.x + x, p.y + y) );
+			}
+
+			polygon.BuildEdges();
+			return polygon;
+		}
+
 		public List<Vector2> Edges {
 			get { return edges; }
 		}
