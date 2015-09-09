@@ -13,7 +13,7 @@ namespace Bolt {
 		private Polygon polygon = new Polygon();
 
 
-		public bool isActive()
+		public override bool isActive()
 		{
 			return active;
 		}
@@ -33,23 +33,23 @@ namespace Bolt {
 			return polygon.OffsetBy(e.x + xOffset, e.y + yOffset);
 		}
 
-		public string GetCollisionType() {
+		public override string GetCollisionType() {
 			return type;
 		}
 
-		public Vector3 GetPosition() {
+		public override Vector3 GetPosition() {
 			return transform.position;
 		}
 
-		public GameObject GetGameObject() {
+		public override GameObject GetGameObject() {
 			return gameObject;
 		}
 
 		public override Vector2 GetCenter() {
-			return GetPolygonAtPosition().Center;
+			return GetPolygonAtPosition(0, 0).Center;
 		}
 
-		public CollisionResult Intersect(ICollider col, float speedX, float speedY) {
+		public override CollisionResult Intersect(ICollider col, float speedX, float speedY) {
 			if (col is Hitbox) {
 				var res = IntersectHitbox(col as Hitbox, speedX, speedY);
 

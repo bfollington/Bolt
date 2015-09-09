@@ -93,7 +93,7 @@ namespace Bolt {
 			}
 		}
 
-		public bool isActive()
+		public override bool isActive()
 		{
 			return active;
 		}
@@ -110,15 +110,15 @@ namespace Bolt {
 			}
 		}
 
-		public string GetCollisionType() {
+		public override string GetCollisionType() {
 			return type;
 		}
 
-		public Vector3 GetPosition() {
+		public override Vector3 GetPosition() {
 			return transform.position;
 		}
 
-		public GameObject GetGameObject() {
+		public override GameObject GetGameObject() {
 			return gameObject;
 		}
 
