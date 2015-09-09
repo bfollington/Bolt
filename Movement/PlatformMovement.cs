@@ -42,42 +42,37 @@ namespace Bolt {
 			var entity = GetComponent<EntityAccess>().entity;
 			mask = GetMask();
 
+            CollisionResult col;
 
-			var scaledVelocity = new Vector2 (
-				velocity.x * TimeUtil.scale (),
-                velocity.y * TimeUtil.scale ()
-            );
-
-			if (velocity.x != 0)
-			{
-				var collision = Collide.WithAtPos (collideTypes, mask, scaledVelocity.x, 0);
-
-				if (!collision.Intersect)
-				{
-					entity.x += scaledVelocity.x;
+			if (!( col = Collide.WithAtPos(collideTypes, mask, velocity.x, 0) ).Intersect) {
+				entity.x += velocity.x;
+			} else {
+				if (col.Collider is Hitbox) {
+					entity.x += col.MinimumTranslation.x;
 				} else {
-
-					velocity.x = 0;
-
-					entity.x += collision.MinimumTranslation.x;
+					entity.y += col.MinimumTranslation.y;
+					entity.x += col.MinimumTranslation.x + velocity.x;
 				}
+
+				velocity.x = 0;
+
 			}
 
-			if (velocity.y != 0)
-			{
-				var collision = Collide.WithAtPos (collideTypes, mask, 0, scaledVelocity.y);
+			if (!( col = Collide.WithAtPos(collideTypes, mask, 0, velocity.y) ).Intersect) {
+				entity.y += velocity.y;
+			} else {
 
-				if (!collision.Intersect)
-				{
-					entity.y += scaledVelocity.y;
+				if (col.Collider is Hitbox) {
+					entity.y += col.MinimumTranslation.y;
 				} else {
-
-					velocity.y = 0;
-
-					entity.y += collision.MinimumTranslation.y;
+					entity.x += col.MinimumTranslation.x;
+					entity.y += col.MinimumTranslation.y + velocity.y;
 				}
-			}
 
+				velocity.y = 0;
+
+			}
+           
 			velocity.y -= gravity;
 
 			velocity.x = ClampUtil.Clamp (velocity.x, -1 * maxSpeed.x, maxSpeed.x);

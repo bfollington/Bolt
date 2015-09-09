@@ -31,7 +31,7 @@ namespace Bolt {
 				{
 					var intersect = collider.Intersect(col, x, y);
 
-					if (intersect.Intersect)
+					if (intersect.Intersect && (intersect.MinimumTranslation.x != 0 || intersect.MinimumTranslation.y != 0) )
 					{
 						return intersect;
 					}

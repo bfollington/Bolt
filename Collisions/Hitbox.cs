@@ -134,9 +134,7 @@ namespace Bolt {
 		}
 
 		public Polygon GetPolygonRepresentation(float xOffset, float yOffset) {
-			if (polygon == null) {
-				BuildPolygon(xOffset, yOffset);
-			}
+			BuildPolygon(xOffset, yOffset);
 
 			return polygon;
 		}
@@ -153,7 +151,7 @@ namespace Bolt {
 
 		}
 
-		public CollisionResult Intersect(ICollider col, float speedX, float speedY) {
+		override public CollisionResult Intersect(ICollider col, float speedX, float speedY) {
 			if (col is Hitbox) {
 				return IntersectHitbox(col as Hitbox, speedX, speedY);
 			}

@@ -24,6 +24,26 @@ public class SceneManager : MonoBehaviour
 		var world = ChangeWorld( new World() );
 		world.Add( new Sylvi(0, 0) );
 
+		var e = new Entity(32, 0);
+		var p = e.AddComponent<Polybox>();
+		p.type = "solid";
+
+		p.AddVertex(new Vector2(0, 0));
+		p.AddVertex(new Vector2(0, 128));
+		p.AddVertex(new Vector2(64, 64));
+
+		world.Add(e);
+
+		e = new Entity(64, 0);
+		p = e.AddComponent<Polybox>();
+		p.type = "solid";
+
+		p.AddVertex(new Vector2(0, 0));
+		p.AddVertex(new Vector2(0, 128));
+		p.AddVertex(new Vector2(64, 64));
+
+		world.Add(e);
+
 		StartTimeline (new TestTimeline ());
 	}
 

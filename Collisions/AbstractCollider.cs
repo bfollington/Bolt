@@ -4,25 +4,25 @@ using Bolt;
 
 public class AbstractCollider : MonoBehaviour, ICollider {
 
-	public bool isActive() {
+	public virtual bool isActive() {
 		return false;
 	}
 
-	public CollisionResult Intersect(ICollider col, float speedX, float speedY) {
+	public virtual CollisionResult Intersect(ICollider col, float speedX, float speedY) {
 		return new CollisionResult() {
 			Intersect = false
 		};
 	}
 
-	public string GetCollisionType() {
+	public virtual string GetCollisionType() {
 		return "";
 	}
 
-	public Vector3 GetPosition() {
+	public virtual Vector3 GetPosition() {
 		return gameObject.transform.position;
 	}
 
-	public GameObject GetGameObject() {
+	public virtual GameObject GetGameObject() {
 		return gameObject;
 	}
 

@@ -85,7 +85,7 @@ namespace Bolt {
 		}
 
 		public PolygonCollisionUtil.PolygonCollisionResult IntersectPolybox(Polybox p, float speedX, float speedY) {
-			return PolygonCollisionUtil.PolygonCollision(GetPolygonAtPosition(speedX, speedY), p.GetPolygon(), new Vector2(0, 0));
+			return PolygonCollisionUtil.PolygonCollision(GetPolygonAtPosition(speedX, speedY), p.GetPolygonAtPosition(0, 0), new Vector2(0, 0));
 		}
 
 		public void OnDrawGizmos()
