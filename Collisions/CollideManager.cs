@@ -62,7 +62,8 @@ namespace Bolt {
 
 				if (colliders != null) {
 					foreach (var col in colliders) {
-						if (col.isActive() && col != collider && types.Contains(col.GetCollisionType())) {
+						// @TODO check center distances for optimisation? or full quadtree?
+						if (col.isActive() && col != collider) {
 							var intersect = collider.Intersect(col, x, y);
 
 							if (intersect.Intersect && (intersect.MinimumTranslation.x != 0 || intersect.MinimumTranslation.y != 0) )

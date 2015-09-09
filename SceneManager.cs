@@ -24,10 +24,10 @@ public class SceneManager : MonoBehaviour
 		
 
 		var world = ChangeWorld( new World() );
+		world.Add(new Sylvi(0, 0));
 
-
-		for (var i = 0; i < 32; i++) {
-			world.Add( new Sylvi(i, 0) );
+		for (var i = 0; i < 256; i++) {
+			world.Add( new TestPlatformer( (i - 128 / 4), 0) );
 		}
 
 		var e = new Entity(32, 0);

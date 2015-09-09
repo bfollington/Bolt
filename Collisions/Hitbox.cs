@@ -122,6 +122,10 @@ namespace Bolt {
 			return gameObject;
 		}
 
+		public override Vector2 GetCenter() {
+			return Center;
+		}
+
 		public void BuildPolygon(float xOffset = 0, float yOffset = 0) {
 			var corners = GetCorners(xOffset, yOffset);
 			polygon = new Polygon();

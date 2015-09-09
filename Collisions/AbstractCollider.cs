@@ -22,6 +22,10 @@ public class AbstractCollider : MonoBehaviour, ICollider {
 		}
 	}
 
+	public virtual Vector2 GetCenter() {
+		return new Vector2(0, 0);
+	}
+
 	public virtual bool isActive() {
 		return false;
 	}

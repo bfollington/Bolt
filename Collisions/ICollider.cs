@@ -11,6 +11,7 @@ namespace Bolt
 		string GetCollisionType();
 		Vector3 GetPosition();
 		GameObject GetGameObject();
+		Vector2 GetCenter();
 	}
 
 }

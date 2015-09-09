@@ -45,6 +45,10 @@ namespace Bolt {
 			return gameObject;
 		}
 
+		public override Vector2 GetCenter() {
+			return GetPolygonAtPosition().Center;
+		}
+
 		public CollisionResult Intersect(ICollider col, float speedX, float speedY) {
 			if (col is Hitbox) {
 				var res = IntersectHitbox(col as Hitbox, speedX, speedY);
