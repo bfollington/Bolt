@@ -21,34 +21,15 @@ public class SceneManager : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		
+		Application.targetFrameRate = 60;
+		QualitySettings.vSyncCount = 0;
 
 		var world = ChangeWorld( new World() );
 		world.Add(new Sylvi(0, 0));
 
-		for (var i = 0; i < 256; i++) {
-			world.Add( new TestPlatformer( (i - 128 / 4), 0) );
+		for (var i = 0; i < 25; i++) {
+			world.Add( new TestPlatformer( i, 0) );
 		}
-
-		var e = new Entity(32, 0);
-		var p = e.AddComponent<Polybox>();
-		p.type = "solid";
-
-		p.AddVertex(new Vector2(0, 0));
-		p.AddVertex(new Vector2(0, 128));
-		p.AddVertex(new Vector2(64, 64));
-
-		world.Add(e);
-
-		e = new Entity(64, 0);
-		p = e.AddComponent<Polybox>();
-		p.type = "solid";
-
-		p.AddVertex(new Vector2(0, 0));
-		p.AddVertex(new Vector2(0, 128));
-		p.AddVertex(new Vector2(64, 64));
-
-		world.Add(e);
 
 		StartTimeline (new TestTimeline ());
 	}
@@ -82,6 +63,8 @@ public class SceneManager : MonoBehaviour
 	void Update ()
 	{
 		world.InnerUpdate();
+
+		Logger.Log(1 / Time.deltaTime);
 
 		foreach (var t in timelines) {
 			t.Update();
