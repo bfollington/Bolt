@@ -23,6 +23,20 @@ namespace Bolt {
 			polygon.BuildEdges();
 		}
 
+
+		// Common shape creation
+
+		public static void CreateSlopeDownRight(Polybox p, float size) {
+			p.AddVertex(new Vector2(0, 0));
+			p.AddVertex(new Vector2(size, -size));
+			p.AddVertex(new Vector2(0, -size));
+		}
+
+
+
+
+
+
 		public Polygon GetPolygon() {
 			return polygon;
 		}
