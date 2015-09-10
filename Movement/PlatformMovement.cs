@@ -2,6 +2,7 @@
 using System.Collections;
 using Bolt;
 
+
 namespace Bolt {
 
 	public class PlatformMovement : MonoBehaviour {
@@ -39,6 +40,7 @@ namespace Bolt {
 		// Update is called once per frame
 		void Update () {
 
+
 			var entity = GetComponent<EntityAccess>().entity;
 			mask = GetMask();
 
@@ -56,6 +58,8 @@ namespace Bolt {
 
 				velocity.x = 0;
 
+
+
 			}
 
 			if (!( col = Collide.WithAtPos(collideTypes, mask, 0, velocity.y) ).Intersect) {
@@ -72,17 +76,20 @@ namespace Bolt {
 				velocity.y = 0;
 
 			}
-           
-			velocity.y -= gravity;
 
+			// Stops sliding down slopes
+			if (!OnGround()) {
+				velocity.y -= gravity;
+			}
+           
 			velocity.x = ClampUtil.Clamp (velocity.x, -1 * maxSpeed.x, maxSpeed.x);
 			velocity.y = ClampUtil.Clamp (velocity.y, -1 * maxSpeed.y, maxSpeed.y);
 		}
 
-		public bool OnGround()
+		public bool OnGround(float offsetX = 0, float offsetY = 0)
 		{
 			mask = GetMask();
-			var collision = Collide.WithAtPos (collideTypes, mask, 0, -0.5f);
+			var collision = Collide.WithAtPos (collideTypes, mask, 0 + offsetX, -0.5f + offsetY);
 
 			return collision.Intersect;
 		}
