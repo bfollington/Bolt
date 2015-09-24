@@ -18,20 +18,17 @@ public class SceneManager : MonoBehaviour
 		return Camera.main;
 	}
 
+	public virtual void Begin() {
+		
+	}
+
 	// Use this for initialization
 	void Start ()
 	{
 		Application.targetFrameRate = 60;
 		QualitySettings.vSyncCount = 0;
 
-		var world = ChangeWorld( new World() );
-		world.Add(new Sylvi(0, 0));
-
-		for (var i = 0; i < 25; i++) {
-			world.Add( new TestPlatformer( i, 0) );
-		}
-
-		StartTimeline (new TestTimeline ());
+		Begin();
 	}
 
 	public static World ChangeWorld(World w) {
@@ -63,8 +60,6 @@ public class SceneManager : MonoBehaviour
 	void Update ()
 	{
 		world.InnerUpdate();
-
-		Logger.Log(1 / Time.deltaTime);
 
 		foreach (var t in timelines) {
 			t.Update();
