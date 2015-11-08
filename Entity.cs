@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System;
 
 public class Entity {
-	
+
 	private GameObject gameObject;
 	private World world;
 
@@ -13,7 +13,7 @@ public class Entity {
 	private Entity parent;
 
 	/// <summary>
-	/// The angle of the Entity in degrees, this is _relative_ to the parent's angle. 
+	/// The angle of the Entity in degrees, this is _relative_ to the parent's angle.
 	/// Underneath, this maps to the z rotation of the transform.
 	/// </summary>
 	/// <value>The angle.</value>
@@ -22,8 +22,82 @@ public class Entity {
 		set { gameObject.transform.localEulerAngles = new Vector3(0, 0, value); }
 	}
 
+	// Passthrough to localEulerAngles
+	public Transform transform {
+		get { return gameObject.transform; }
+	}
+
+	// Passthrough to localEulerAngles
+	public Vector3 rotation {
+		get { return gameObject.transform.localEulerAngles; }
+		set { gameObject.transform.localEulerAngles = value; }
+	}
+
+	// Passthrough to localEulerAngles
+	public Vector3 scale {
+		get { return gameObject.transform.localScale; }
+		set { gameObject.transform.localScale = value; }
+	}
+
+	// Passthrough to localPosition
+	public Vector3 position {
+		get { return gameObject.transform.localPosition; }
+		set { gameObject.transform.localPosition = value; }
+	}
+
 	/// <summary>
-	/// The x position of the Entity, this is _relative_ to the parent's x. 
+	/// The x scale of the Entity, this is _relative_ to the parent's x scale.
+	/// Underneath, this maps to the x component of the transform scale.
+	/// </summary>
+	/// <value>The x scale.</value>
+	public float xScale
+	{
+		get { return gameObject.transform.localScale.x; }
+		set {
+			gameObject.transform.localScale = new Vector3(
+				value,
+				gameObject.transform.localScale.y,
+				gameObject.transform.localScale.z
+			);
+		}
+	}
+
+	/// <summary>
+	/// The y scale of the Entity, this is _relative_ to the parent's y scale.
+	/// Underneath, this maps to the y component of the transform scale.
+	/// </summary>
+	/// <value>The y scale.</value>
+	public float yScale
+	{
+		get { return gameObject.transform.localScale.y; }
+		set {
+			gameObject.transform.localScale = new Vector3(
+				gameObject.transform.localScale.x,
+				value,
+				gameObject.transform.localScale.z
+			);
+		}
+	}
+
+	/// <summary>
+	/// The y scale of the Entity, this is _relative_ to the parent's y scale.
+	/// Underneath, this maps to the y component of the transform scale.
+	/// </summary>
+	/// <value>The y scale.</value>
+	public float zScale
+	{
+		get { return gameObject.transform.localScale.z; }
+		set {
+			gameObject.transform.localScale = new Vector3(
+				gameObject.transform.localScale.x,
+				gameObject.transform.localScale.y,
+				value
+			);
+		}
+	}
+
+	/// <summary>
+	/// The x position of the Entity, this is _relative_ to the parent's x.
 	/// Underneath, this maps to the x coordinate of the transform.
 	/// </summary>
 	/// <value>The x position.</value>
@@ -40,7 +114,7 @@ public class Entity {
 	}
 
 	/// <summary>
-	/// The y position of the Entity, this is _relative_ to the parent's y. 
+	/// The y position of the Entity, this is _relative_ to the parent's y.
 	/// Underneath, this maps to the y coordinate of the transform.
 	/// </summary>
 	/// <value>The y position.</value>
@@ -57,8 +131,8 @@ public class Entity {
 	}
 
 	/// <summary>
-	/// The layer of the Entity, this is _relative_ to the parent's layer. 
-	/// Underneath, this maps to the y coordinate of the transform.
+	/// The layer of the Entity, this is _relative_ to the parent's layer.
+	/// Underneath, this maps to the z coordinate of the transform.
 	/// </summary>
 	/// <value>The layer.</value>
 	public float layer
@@ -79,11 +153,21 @@ public class Entity {
 
 		this.x = x;
 		this.y = y;
+		init();
+	}
+
+	private void init() {
 		children = new List<Entity>();
 
 		var access = AddComponent<EntityAccess>();
 		access.entity = this;
 	}
+
+	public Entity(GameObject obj) {
+		gameObject = obj;
+		gameObject.SetActive(false);
+        init();
+    }
 
 	/// <summary>
 	/// Get acess to the GameObject that represents this Entity in game.
@@ -106,7 +190,7 @@ public class Entity {
 		e.parent = this;
 
 		if (world != null) {
-			e.Add(world);	
+			e.Add(world);
 		}
 
 		var x = e.x;
@@ -199,11 +283,11 @@ public class Entity {
 	public void SetName(string name) {
 		gameObject.name = name;
 	}
-	
+
 	public T GetComponent<T>() {
 		return gameObject.GetComponent<T>();
 	}
-	
+
 	public T AddComponent<T>() where T : Component {
 		return gameObject.AddComponent<T>() as T;
 	}
@@ -222,7 +306,7 @@ public class Entity {
 		foreach (var child in children) {
 			child.Add(world);
 		}
-		
+
 		Added();
 	}
 
@@ -238,20 +322,20 @@ public class Entity {
 		foreach (var child in children) {
 			child.Remove(delay);
 		}
-		
+
 		gameObject.SetActive(false);
 		world = null;
 		this.isAdded = false;
 	}
 
 	public void Added() {
-	
+
 	}
-	
+
 	public void Removed() {
-		
+
 	}
-	
+
 	// Update is called once per frame
 	public virtual void Update() {
 
