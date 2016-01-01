@@ -3,7 +3,7 @@ using System.Collections;
 using System.Text;
 
 namespace Bolt {
-	public class Logger
+	public class Logging
 	{
 		private static string buildString(params object[] values)
 		{

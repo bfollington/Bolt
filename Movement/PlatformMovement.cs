@@ -15,6 +15,8 @@ namespace Bolt {
 		public string[] collideTypes;
 
 		private AbstractCollider mask;
+		
+		public event HitWallHandler HitWall;
 
 		// Use this for initialization
 		void Start () {
@@ -36,6 +38,8 @@ namespace Bolt {
 
 			return mask;
 		}
+		
+		public delegate void HitWallHandler(PlatformMovement m, bool x, bool y);
 
 		// Update is called once per frame
 		void Update () {
@@ -58,7 +62,7 @@ namespace Bolt {
 
 				velocity.x = 0;
 
-
+				HitWall(this, true, false);
 
 			}
 
@@ -74,6 +78,8 @@ namespace Bolt {
 				}
 
 				velocity.y = 0;
+				
+				HitWall(this, false, true);
 
 			}
 

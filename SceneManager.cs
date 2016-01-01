@@ -45,13 +45,13 @@ public class SceneManager : MonoBehaviour
 
 	public void StartTimeline (Timeline timeline)
 	{
-		Logger.Log("starting timeline");
+		Logging.Log("starting timeline");
 		timelines.Add(timeline);
 		timeline.parent = this;
 	}
 
 	public void EndTimeline(Timeline timeline) {
-		Logger.Log("ending timeline");
+		Logging.Log("ending timeline");
 		timeline.parent = null;
 		timelines.Remove(timeline);
 	}

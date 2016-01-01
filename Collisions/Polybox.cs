@@ -86,7 +86,7 @@ namespace Bolt {
 				};
 			}
 
-			Logger.Log("Collision type not supported for", this, col);
+			Logging.Log("Collision type not supported for", this, col);
 
 			return new CollisionResult() {
 				Intersect = false

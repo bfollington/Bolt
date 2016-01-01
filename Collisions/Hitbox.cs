@@ -164,7 +164,7 @@ namespace Bolt {
 				return IntersectPolybox(col as Polybox, speedX, speedY);
 			}
 
-			Logger.Log("Collision type not supported for", this, col);
+			Logging.Log("Collision type not supported for", this, col);
 
 			return new CollisionResult() {
 				Intersect = false

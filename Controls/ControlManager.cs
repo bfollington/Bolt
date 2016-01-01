@@ -20,6 +20,23 @@ namespace Bolt
 		public const int RIGHT_BUTTON = 1;
 		public const int MIDDLE_BUTTON = 2;
 		public const string SCROLL_WHEEL = "SCROLL";
+		
+		public static readonly KeyCode[] JOYPAD_ONE_BUTTONS = {
+			KeyCode.Joystick1Button0,
+			KeyCode.Joystick1Button1,
+			KeyCode.Joystick1Button2,
+			KeyCode.Joystick1Button3,
+			KeyCode.Joystick1Button4,
+			KeyCode.Joystick1Button5,
+			KeyCode.Joystick1Button6,
+			KeyCode.Joystick1Button7,
+			KeyCode.Joystick1Button8,
+			KeyCode.Joystick1Button9
+		};
+		
+		public static readonly string[] JOYPAD_ONE_AXES = {
+			"Joy1X"
+		};
 
 		public static readonly Dictionary<string, string> xbox = new Dictionary<string, string>
 		{

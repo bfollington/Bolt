@@ -24,7 +24,7 @@ public class SpriteGraphic : Graphic {
         this.x = x;
         this.y = y;
 
-		Logger.Log(this.x, this.y);
+		Logging.Log(this.x, this.y);
 
         child.AddComponent<SpriteRenderer>();
         this.sprite = sprite;
