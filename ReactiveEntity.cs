@@ -9,7 +9,7 @@ namespace Bolt
 	public class ReactiveEntity : Entity
 	{
 
-		public ReactiveEntity (float x = 0, float y = 0) : base(x, y)
+		public ReactiveEntity () : base(0, 0)
 		{
 			
 		}
