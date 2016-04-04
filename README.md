@@ -1,4 +1,7 @@
 # Bolt
+
+**Attention: I will be recreating many of the ideas here in a new framework, based around [EgoCS](https://github.com/andoowhy/EgoCS), stay tuned**
+
 A 2D Unity framework / utility collection, built on top of Unity 5
 
 `Bolt` is the development framework used by us at Voltic, it's more-or-less a suite of helper utilities that speed up common tasks.
